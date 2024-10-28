@@ -29,8 +29,11 @@ def load_from_annos(anno_path):
     return datas
 
 
-def load_data(path: str):
+def load_data(path: str, split: int = 1, part: int = 1):
     rgbs = glob.glob(path + "/*.jpg") + glob.glob(path + "/*.png")
+    rgbs.sort()
+    num_per_part = len(rgbs) // split
+    rgbs = rgbs[num_per_part * (part - 1) : num_per_part * part]
     # intrinsic =  [835.8179931640625, 835.8179931640625, 961.5419921875, 566.8090209960938] #[721.53769, 721.53769, 609.5593, 172.854]
     intrinsic = [
         400,
