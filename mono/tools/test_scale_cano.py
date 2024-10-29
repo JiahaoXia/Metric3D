@@ -55,6 +55,8 @@ def parse_args():
     parser.add_argument(
         "--batch_size", default=1, type=int, help="the batch size for inference"
     )
+    parser.add_argument("--split", type=int, help="split the data", default=1)
+    parser.add_argument("--part", type=int, help="part of the data", default=1)
     args = parser.parse_args()
     return args
 
@@ -116,7 +118,7 @@ def main(args):
     if "json" in test_data_path:
         test_data = load_from_annos(test_data_path)
     else:
-        test_data = load_data(args.test_data_path)
+        test_data = load_data(args.test_data_path, args.split, args.part)
 
     if not cfg.distributed:
         main_worker(0, cfg, args.launcher, test_data)
