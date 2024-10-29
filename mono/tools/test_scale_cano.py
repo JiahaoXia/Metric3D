@@ -118,7 +118,12 @@ def main(args):
     if "json" in test_data_path:
         test_data = load_from_annos(test_data_path)
     else:
-        test_data = load_data(args.test_data_path, args.split, args.part)
+        test_data = load_data(
+            args.test_data_path,
+            osp.join(args.show_dir, "pred"),
+            args.split,
+            args.part,
+        )
 
     if not cfg.distributed:
         main_worker(0, cfg, args.launcher, test_data)

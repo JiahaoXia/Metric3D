@@ -29,11 +29,19 @@ def load_from_annos(anno_path):
     return datas
 
 
-def load_data(path: str, split: int = 1, part: int = 1):
+def load_data(path: str, out_path: str, split: int = 1, part: int = 1):
     rgbs = glob.glob(path + "/*.jpg") + glob.glob(path + "/*.png")
     rgbs.sort()
     num_per_part = len(rgbs) // split
     rgbs = rgbs[num_per_part * (part - 1) : num_per_part * part]
+    res_rgbs = []
+    for i in rgbs:
+        if os.path.exists(
+            os.path.join(out_path, os.path.basename(i).replace(".jpg", ".npz"))
+        ):
+            continue
+        res_rgbs.append(i)
+    print(f"{len(res_rgbs)} | Total {len(rgbs)} not processed.")
     # intrinsic =  [835.8179931640625, 835.8179931640625, 961.5419921875, 566.8090209960938] #[721.53769, 721.53769, 609.5593, 172.854]
     intrinsic = [
         400,
@@ -50,6 +58,15 @@ def load_data(path: str, split: int = 1, part: int = 1):
             # "folder": i.split("/")[-3],
             "folder": None,
         }
-        for i in rgbs
+        for i in res_rgbs
     ]
     return data
+
+
+if __name__ == "__main__":
+    load_data(
+        "/home/user/XJH/Geo-Loc/geo-loc-data/data/manville-panos/pov",
+        "/home/user/XJH/Geo-Loc/geo-loc-data/data/manville-panos/pov-depth/pred",
+        1,
+        1,
+    )
